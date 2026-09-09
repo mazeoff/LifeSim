@@ -1,13 +1,10 @@
-import { DEFAULT_AREA_SETTINGS } from "./constants";
-
 export class LifeEngine {
     readonly width: number;
     readonly height: number;
 
     private grid: Uint8Array;
 
-    constructor () {
-        const { width, height } = DEFAULT_AREA_SETTINGS;
+    constructor (width: number, height: number) {
 
         this.width = width;
         this.height = height;
@@ -47,8 +44,8 @@ export class LifeEngine {
     public countNeighbors(x: number, y: number): number {
         let count = 0;
 
-        for (let dy = -1; dy < 1; dy++) {
-            for (let dx = -1; dx < 1; dx++) {
+        for (let dy = -1; dy <= 1; dy++) {
+            for (let dx = -1; dx <= 1; dx++) {
                 if  (!dx && !dy) {
                     continue;
                 }
