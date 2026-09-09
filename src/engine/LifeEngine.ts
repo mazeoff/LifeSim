@@ -18,6 +18,10 @@ export class LifeEngine {
         return y * this.width + x;
     }
 
+    private wrap(value: number, size: number): number {
+        return (value + size) % size;
+    }
+
     public get cells(): Uint8Array {
         return this.grid;
     }
@@ -38,5 +42,29 @@ export class LifeEngine {
 
     public clear() {
         this.grid.fill(0);
+    }
+
+    public countNeighbors(x: number, y: number): number {
+        let count = 0;
+
+        for (let dy = -1; dy < 1; dy++) {
+            for (let dx = -1; dx < 1; dx++) {
+                if  (!dx && !dy) {
+                    continue;
+                }
+
+                const neighborCell = {
+                    x: this.wrap(x + dx, this.width),
+                    y: this.wrap(y + dy, this.height)
+                };
+
+
+                if (this.isAlive(neighborCell.x, neighborCell.y)) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 }
