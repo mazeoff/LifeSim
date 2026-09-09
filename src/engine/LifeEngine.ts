@@ -5,7 +5,6 @@ export class LifeEngine {
     private grid: Uint8Array;
 
     constructor (width: number, height: number) {
-
         this.width = width;
         this.height = height;
         this.grid = new Uint8Array(width * height);
@@ -63,5 +62,25 @@ export class LifeEngine {
         }
 
         return count;
+    }
+
+    public step() {
+        const nextGrid = new Uint8Array(this.grid.length);
+
+        for (let y = 0; y < this.height; y++) {
+            for (let x = 0; x < this.width; x++) {
+                const index = this.getIndex(x, y);
+                const isAlive = this.isAlive(x, y);
+                const neighborsCount = this.countNeighbors(x, y);
+
+                if (isAlive) {
+                    nextGrid[index] = Number(neighborsCount === 2 || neighborsCount === 3);
+                } else {
+                    nextGrid[index] = Number(neighborsCount === 3);
+                }
+            }
+        }
+
+        this.grid = nextGrid;
     }
 }
