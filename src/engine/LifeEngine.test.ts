@@ -80,4 +80,69 @@ describe('LifeEngine', () => {
 
         expect(engine.countNeighbors(49, 49)).toBe(3);
     });
+
+    it('keeps block pattern stable', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.setCell(10, 10, true);
+        engine.setCell(11, 10, true);
+        engine.setCell(10, 11, true);
+        engine.setCell(11, 11, true);
+
+        engine.step();
+
+        expect(engine.isAlive(10, 10)).toBe(true);
+        expect(engine.isAlive(11, 10)).toBe(true);
+        expect(engine.isAlive(10, 11)).toBe(true);
+        expect(engine.isAlive(11, 11)).toBe(true);
+    });
+
+    it('updates blinker pattern to the next generation', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.setCell(10, 9, true);
+        engine.setCell(10, 10, true);
+        engine.setCell(10, 11, true);
+
+        engine.step();
+
+        expect(engine.isAlive(9, 10)).toBe(true);
+        expect(engine.isAlive(10, 10)).toBe(true);
+        expect(engine.isAlive(11, 10)).toBe(true);
+
+        expect(engine.isAlive(10, 9)).toBe(false);
+        expect(engine.isAlive(10, 11)).toBe(false);
+    });
+
+    it('returns blinker to its initial state after two steps', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.setCell(10, 9, true);
+        engine.setCell(10, 10, true);
+        engine.setCell(10, 11, true);
+
+        engine.step();
+        engine.step();
+
+        expect(engine.isAlive(10, 9)).toBe(true);
+        expect(engine.isAlive(10, 10)).toBe(true);
+        expect(engine.isAlive(10, 11)).toBe(true);
+
+        expect(engine.isAlive(9, 10)).toBe(false);
+        expect(engine.isAlive(11, 10)).toBe(false);
+    });
+
+    it('applies Conway rules across toroidal boundaries', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.setCell(49, 0, true);
+        engine.setCell(0, 0, true);
+        engine.setCell(1, 0, true);
+
+        engine.step();
+
+        expect(engine.isAlive(0, 49)).toBe(true);
+        expect(engine.isAlive(0, 0)).toBe(true);
+        expect(engine.isAlive(0, 1)).toBe(true);
+    });
 });
