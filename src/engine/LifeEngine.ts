@@ -38,6 +38,30 @@ export class LifeEngine {
         return this.history.length;
     }
 
+    public get canGoBack(): boolean {
+        return this.currentStep > 0;
+    }
+
+    public get canGoForward(): boolean {
+        return this.currentStep < this.history.length - 1;
+    }
+
+    public prevStep() {
+        if (!this.canGoBack) return;
+
+        this.currentStep--;
+    }
+
+    public nextStep() {
+        if (!this.canGoForward) {
+            this.step();
+            
+            return;
+        }
+
+        this.currentStep++;
+    }
+
     public getHistoryStep(step: number): Uint8Array | undefined {
         const state = this.history[step];
 
