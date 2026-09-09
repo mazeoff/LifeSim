@@ -145,4 +145,65 @@ describe('LifeEngine', () => {
         expect(engine.isAlive(0, 0)).toBe(true);
         expect(engine.isAlive(0, 1)).toBe(true);
     });
+
+    it('moves back through calculated history', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.setCell(10, 9, true);
+        engine.setCell(10, 10, true);
+        engine.setCell(10, 11, true);
+
+        engine.nextStep();
+        engine.nextStep();
+
+        expect(engine.stepNumber).toBe(2);
+
+        engine.prevStep();
+
+        expect(engine.stepNumber).toBe(1);
+
+        engine.prevStep();
+
+        expect(engine.stepNumber).toBe(0);
+    });
+
+    it('does not move before the initial state', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.prevStep();
+
+        expect(engine.stepNumber).toBe(0);
+    });
+
+    it('calculates a new state when moving forward from history end', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.setCell(10, 9, true);
+        engine.setCell(10, 10, true);
+        engine.setCell(10, 11, true);
+
+        expect(engine.historyLength).toBe(1);
+
+        engine.nextStep();
+
+        expect(engine.stepNumber).toBe(1);
+        expect(engine.historyLength).toBe(2);
+    });
+
+    it('reports available history navigation correctly', () => {
+        const engine = new LifeEngine(50, 50);
+
+        expect(engine.canGoBack).toBe(false);
+        expect(engine.canGoForward).toBe(false);
+
+        engine.nextStep();
+
+        expect(engine.canGoBack).toBe(true);
+        expect(engine.canGoForward).toBe(false);
+
+        engine.prevStep();
+
+        expect(engine.canGoBack).toBe(false);
+        expect(engine.canGoForward).toBe(true);
+    });
 });
