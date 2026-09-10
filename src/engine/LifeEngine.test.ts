@@ -114,22 +114,23 @@ describe('LifeEngine', () => {
         expect(engine.isAlive(10, 11)).toBe(false);
     });
 
-    it('returns blinker to its initial state after two steps', () => {
+    it('finishes when blinker returns to its initial state', () => {
         const engine = new LifeEngine(50, 50);
 
         engine.setCell(10, 9, true);
         engine.setCell(10, 10, true);
         engine.setCell(10, 11, true);
 
-        engine.step();
-        engine.step();
+        engine.nextStep();
 
-        expect(engine.isAlive(10, 9)).toBe(true);
-        expect(engine.isAlive(10, 10)).toBe(true);
-        expect(engine.isAlive(10, 11)).toBe(true);
+        expect(engine.isFinished).toBe(false);
+        expect(engine.stepNumber).toBe(1);
 
-        expect(engine.isAlive(9, 10)).toBe(false);
-        expect(engine.isAlive(11, 10)).toBe(false);
+        engine.nextStep();
+
+        expect(engine.isFinished).toBe(true);
+        expect(engine.stepNumber).toBe(1);
+        expect(engine.historyLength).toBe(2);
     });
 
     it('applies Conway rules across toroidal boundaries', () => {
@@ -149,9 +150,11 @@ describe('LifeEngine', () => {
     it('moves back through calculated history', () => {
         const engine = new LifeEngine(50, 50);
 
-        engine.setCell(10, 9, true);
-        engine.setCell(10, 10, true);
-        engine.setCell(10, 11, true);
+        engine.setCell(11, 10, true);
+        engine.setCell(12, 11, true);
+        engine.setCell(10, 12, true);
+        engine.setCell(11, 12, true);
+        engine.setCell(12, 12, true);
 
         engine.nextStep();
         engine.nextStep();
@@ -193,6 +196,10 @@ describe('LifeEngine', () => {
     it('reports available history navigation correctly', () => {
         const engine = new LifeEngine(50, 50);
 
+        engine.setCell(10, 9, true);
+        engine.setCell(10, 10, true);
+        engine.setCell(10, 11, true);
+
         expect(engine.canGoBack).toBe(false);
         expect(engine.canGoForward).toBe(false);
 
@@ -205,5 +212,18 @@ describe('LifeEngine', () => {
 
         expect(engine.canGoBack).toBe(false);
         expect(engine.canGoForward).toBe(true);
+    });
+
+    it('finishes simulation when stable state repeats', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.setCell(10, 10, true);
+        engine.setCell(11, 10, true);
+        engine.setCell(10, 11, true);
+        engine.setCell(11, 11, true);
+
+        engine.nextStep();
+
+        expect(engine.isFinished).toBe(true);
     });
 });
