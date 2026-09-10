@@ -42,9 +42,17 @@ function Controls(props: ControlsProps) {
             </button>
 
             {engine.isFinished && (
-                <span className={styles.finished}>
-                    {LANGS.FINISH}
-                </span>
+                <>
+                    <span className={styles.finished}>
+                        {LANGS.FINISH}
+                    </span>
+                    <button
+                        type="button"
+                        onClick={() => engine.reset()}
+                    >
+                        {LANGS.RETRY}
+                    </button>
+                </>
             )}
         </div>
     );

@@ -9,4 +9,5 @@ export const LANGS = {
     STEP: "Шаг",
     CLEAR: "Очистить",
     FINISH: "Симуляция завершена",
+    RETRY: "Начать заново",
 }
