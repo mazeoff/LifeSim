@@ -1,0 +1,21 @@
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 16px;
+
+    button {
+        padding: 8px 14px;
+        cursor: pointer;
+
+        &:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    }
+}
+
+.finished {
+    font-weight: 600;
+}
