@@ -4,14 +4,18 @@ export class LifeEngine {
 
     private history: Uint8Array[] = [];
     private currentStep: number = 0;
+    private seenStates = new Set<string>();
+    private finished = false;
 
     constructor (width: number, height: number) {
         this.width = width;
         this.height = height;
 
-        this.history.push(
-            new Uint8Array(new Uint8Array(width * height))
-        );
+        this.history.push(new Uint8Array(width * height));
+    }
+
+    private serialize(grid: Uint8Array): string {
+        return grid.join('');
     }
 
     private get currentGrid(): Uint8Array {
@@ -46,6 +50,10 @@ export class LifeEngine {
         return this.currentStep < this.history.length - 1;
     }
 
+    public get isFinished(): boolean {
+        return this.finished;
+    }
+
     public prevStep() {
         if (!this.canGoBack) return;
 
@@ -53,19 +61,18 @@ export class LifeEngine {
     }
 
     public nextStep() {
-        if (!this.canGoForward) {
-            this.step();
-            
+        if (this.canGoForward) {
+            this.currentStep++;
             return;
         }
 
-        this.currentStep++;
+        this.step();
     }
 
     public getHistoryStep(step: number): Uint8Array | undefined {
         const state = this.history[step];
 
-        return !step ? undefined : new Uint8Array(state)
+        return state ? new Uint8Array(state) : undefined;
     }
     
     public setCell(x: number, y: number, isAlive: boolean) {
@@ -110,6 +117,12 @@ export class LifeEngine {
     }
 
     public step() {
+        if (this.finished) return;
+
+        if (this.history.length === 1 && this.seenStates.size === 0) {
+            this.seenStates.add(this.serialize(this.currentGrid));
+        }
+
         const currentGrid = this.currentGrid;
         const nextGrid = new Uint8Array(currentGrid.length);
 
@@ -125,8 +138,18 @@ export class LifeEngine {
                     : Number(neighborsCount === 3);
             }
         }
+        
+        const serializedState = this.serialize(nextGrid);
+        
+        if (this.seenStates.has(serializedState)) {
+            this.finished = true;
+            
+            return;
+        }
 
         this.history.push(nextGrid);
         this.currentStep++;
+
+        this.seenStates.add(serializedState);
     }
 }
