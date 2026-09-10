@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx/src/internal.js";
+import { makeAutoObservable } from "mobx";
 
 export class LifeEngine {
     readonly width: number;
