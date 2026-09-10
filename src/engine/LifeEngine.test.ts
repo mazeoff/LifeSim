@@ -226,4 +226,32 @@ describe('LifeEngine', () => {
 
         expect(engine.isFinished).toBe(true);
     });
+
+    it('does not allow editing after simulation starts', () => {
+        const engine = new LifeEngine(50, 50);
+
+        engine.setCell(10, 9, true);
+        engine.setCell(10, 10, true);
+        engine.setCell(10, 11, true);
+
+        engine.nextStep();
+
+        const stateBeforeEdit = engine.cells;
+
+        engine.toggleCell(20, 20);
+        engine.setCell(21, 21, true);
+        engine.clear();
+
+        expect(engine.cells).toEqual(stateBeforeEdit);
+    });
+
+    it('allows editing initial state before simulation starts', () => {
+        const engine = new LifeEngine(50, 50);
+
+        expect(engine.canEdit).toBe(true);
+
+        engine.setCell(10, 10, true);
+
+        expect(engine.isAlive(10, 10)).toBe(true);
+    });
 });
