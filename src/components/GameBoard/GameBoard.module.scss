@@ -1,0 +1,47 @@
+.board {
+    display: grid;
+    grid-template-columns: repeat(50, 12px);
+    grid-template-rows: repeat(50, 12px);
+
+    width: fit-content;
+    padding: 8px;
+
+    background: #18181b;
+    border: 1px solid #2f3035;
+    border-radius: 8px;
+
+    gap: 1px;
+}
+
+.cell {
+    width: 12px;
+    height: 12px;
+
+    padding: 0;
+    border: 0;
+    border-radius: 1px;
+
+    background: #27272a;
+
+    cursor: pointer;
+
+    transition:
+        background-color 100ms ease,
+        transform 100ms ease;
+
+    &:hover:not(:disabled) {
+        background: #3f3f46;
+    }
+
+    &.alive {
+        background: #86b98b;
+
+        &:hover:not(:disabled) {
+            background: #9ac69e;
+        }
+    }
+
+    &:disabled {
+        cursor: default;
+    }
+}
