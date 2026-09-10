@@ -54,6 +54,10 @@ export class LifeEngine {
         return this.finished;
     }
 
+    public get canEdit(): boolean {
+        return this.history.length === 1;
+    }
+
     public prevStep() {
         if (!this.canGoBack) return;
 
@@ -76,10 +80,14 @@ export class LifeEngine {
     }
     
     public setCell(x: number, y: number, isAlive: boolean) {
+        if (!this.canEdit) return;
+
         this.currentGrid[this.getIndex(x, y)] = Number(isAlive);
     }
 
     public toggleCell(x: number, y: number) {
+        if (!this.canEdit) return;
+
         const index = this.getIndex(x, y);
 
         this.currentGrid[index] = Number(!this.currentGrid[index]);
@@ -90,6 +98,8 @@ export class LifeEngine {
     }
 
     public clear() {
+        if (!this.canEdit) return;
+        
         this.currentGrid.fill(0);
     }
 
