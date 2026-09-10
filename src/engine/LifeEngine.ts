@@ -111,7 +111,9 @@ export class LifeEngine {
     public clear() {
         if (!this.canEdit) return;
 
-        this.currentGrid.fill(0);
+        this.history[this.currentStep] = new Uint8Array(
+            this.width * this.height
+        );
     }
 
     public reset() {
