@@ -1,3 +1,5 @@
+import { makeAutoObservable } from "mobx/src/internal.js";
+
 export class LifeEngine {
     readonly width: number;
     readonly height: number;
@@ -12,6 +14,8 @@ export class LifeEngine {
         this.height = height;
 
         this.history.push(new Uint8Array(width * height));
+
+        makeAutoObservable(this);
     }
 
     private serialize(grid: Uint8Array): string {
@@ -82,15 +86,22 @@ export class LifeEngine {
     public setCell(x: number, y: number, isAlive: boolean) {
         if (!this.canEdit) return;
 
-        this.currentGrid[this.getIndex(x, y)] = Number(isAlive);
+        const grid = new Uint8Array(this.currentGrid);
+
+        grid[this.getIndex(x, y)] = Number(isAlive);
+
+        this.history[this.currentStep] = grid;
     }
 
     public toggleCell(x: number, y: number) {
         if (!this.canEdit) return;
 
+        const grid = new Uint8Array(this.currentGrid);
         const index = this.getIndex(x, y);
 
-        this.currentGrid[index] = Number(!this.currentGrid[index]);
+        grid[index] = Number(!grid[index]);
+
+        this.history[this.currentStep] = grid;
     }
 
     public isAlive(x: number, y: number): boolean {
@@ -99,7 +110,7 @@ export class LifeEngine {
 
     public clear() {
         if (!this.canEdit) return;
-        
+
         this.currentGrid.fill(0);
     }
 
