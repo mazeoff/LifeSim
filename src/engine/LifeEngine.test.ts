@@ -254,4 +254,25 @@ describe('LifeEngine', () => {
 
         expect(engine.isAlive(10, 10)).toBe(true);
     });
+
+    it('resets simulation to initial state', () => {
+    const engine = new LifeEngine(50, 50);
+
+        engine.setCell(10, 9, true);
+        engine.setCell(10, 10, true);
+        engine.setCell(10, 11, true);
+
+        engine.nextStep();
+        engine.nextStep();
+
+        expect(engine.isFinished).toBe(true);
+
+        engine.reset();
+
+        expect(engine.stepNumber).toBe(0);
+        expect(engine.historyLength).toBe(1);
+        expect(engine.isFinished).toBe(false);
+        expect(engine.canEdit).toBe(true);
+        expect(engine.cells.every((cell) => cell === 0)).toBe(true);
+    });
 });

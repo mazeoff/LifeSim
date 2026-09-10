@@ -114,6 +114,16 @@ export class LifeEngine {
         this.currentGrid.fill(0);
     }
 
+    public reset() {
+        this.history = [
+            new Uint8Array(this.width * this.height),
+        ];
+
+        this.currentStep = 0;
+        this.seenStates.clear();
+        this.finished = false;
+    }
+
     public countNeighbors(x: number, y: number): number {
         let count = 0;
 
