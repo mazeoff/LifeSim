@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite";
-import { LANGS } from "../../engine/constants";
+import { LANGS } from "../../constants";
 import type { LifeEngine } from "../../engine/LifeEngine";
 import styles from './Controls.module.scss';
 
