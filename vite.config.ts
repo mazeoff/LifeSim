@@ -2,8 +2,9 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  plugins: [react()],
-  define: {
+    plugins: [react()],
+    define: {
         __DEV__: true,
     },
+    base: '/LifeSim/',
 })
